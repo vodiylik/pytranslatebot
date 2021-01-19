@@ -6,24 +6,29 @@ translator = Translator()
 TOKEN = os.environ.get("BOT_TOKEN")
 bot = telebot.TeleBot(token=TOKEN)
 
+hello_message = (
+    "Salom,\nhozirda bot test tartibida ishlamoqda. \nTarjimon  botiga xush kelibsiz! "
+)
+msg = "Iltimos ingliz yoki o'zbek tilidagi matnni yozib yuboring."
+
 # handle /start command
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    hello_msg = "Salom,\nhozirda bot test tartibida ishlamoqda. \nTarjimon  botiga xush kelibsiz!"
-    hello_msg += "\nIngliz yoki o'zbek tilidagi matnni yozib yuboring."
-    bot.reply_to(message, hello_msg)
+    bot.reply_to(message, hello_message + msg)
 
 
 @bot.message_handler(content_types=["text"])
 def func(message):
     detected_language = translator.detect(message)
 
-    if detected_language in ["uz", "en", "ru"]:
-        word = translator.translate(message, dest=detected_language).text
-        bot.reply_to(message, word)
+    if detected_language in ["en"]:
+        translated_msg = translator.translate(message, dest="uz").text
+        bot.reply_to(message, translated_msg)
+    elif detected_language in ["uz"]:
+        translated_msg = translator.translate(message, dest="en").text
+        bot.reply_to(message, translated_msg)
     else:
-        a = "bugun siz uz dan en ga yoki \n en dan uz ga o'talolasiz "
-        bot.reply_to(message, a)
+        bot.reply_to(message, msg)
 
 
 bot.polling()
