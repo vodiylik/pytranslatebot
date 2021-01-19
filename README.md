@@ -1,6 +1,6 @@
 # pytranslatebot
 
-Sample Python Google Translate bot for Telegram
+Sample bot for translating uz2eng and eng2uz via Google Translate written in Python
 
 # How to run?
 
